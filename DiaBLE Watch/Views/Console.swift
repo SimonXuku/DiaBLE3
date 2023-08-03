@@ -18,77 +18,80 @@ struct Console: View {
     var body: some View {
         VStack(spacing: 0) {
 
-            if showingFilterField {
-                ScrollView {
+            VStack(spacing: 0) {
 
-                    HStack {
-                        Image(systemName: "magnifyingglass").foregroundColor(Color(.lightGray))
-                        TextField("Filter", text: $filterString)
-                            .foregroundColor(.blue)
-                        if filterString.count > 0 {
-                            Button {
-                                filterString = ""
-                            } label: {
-                                Image(systemName: "xmark.circle.fill")
+                if showingFilterField {
+                    ScrollView {
+
+                        HStack {
+                            Image(systemName: "magnifyingglass").foregroundColor(Color(.lightGray))
+                            TextField("Filter", text: $filterString)
+                                .foregroundColor(.blue)
+                            if filterString.count > 0 {
+                                Button {
+                                    filterString = ""
+                                } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                }
+                                .frame(maxWidth: 24)
+                                .padding(0)
+                                .buttonStyle(.plain)
+                                .foregroundColor(.blue)
                             }
-                            .frame(maxWidth: 24)
-                            .padding(0)
-                            .buttonStyle(.plain)
-                            .foregroundColor(.blue)
                         }
-                    }
 
-                    // TODO: picker to filter labels
-                    ForEach(Array(log.labels), id: \.self) { label in
-                        Button {
-                            filterString = label
-                        } label: {
-                            Text(label).font(.caption).foregroundColor(.blue)
+                        // TODO: picker to filter labels
+                        ForEach(Array(log.labels), id: \.self) { label in
+                            Button {
+                                filterString = label
+                            } label: {
+                                Text(label).font(.caption).foregroundColor(.blue)
+                            }
                         }
                     }
                 }
-                .padding()
-            }
 
-            ScrollViewReader { proxy in
-                ScrollView(showsIndicators: true) {
-                    LazyVStack(alignment: .leading, spacing: 10) {
-                        if filterString.isEmpty {
-                            ForEach(log.entries) { entry in
-                                Text(entry.message)
+                ScrollViewReader { proxy in
+                    ScrollView(showsIndicators: true) {
+                        LazyVStack(alignment: .leading, spacing: 10) {
+                            if filterString.isEmpty {
+                                ForEach(log.entries) { entry in
+                                    Text(entry.message)
+                                }
+                            } else {
+                                let pattern = filterString.lowercased()
+                                ForEach(log.entries.filter { $0.message.lowercased().contains(pattern) }) { entry in
+                                    Text(entry.message)
+                                }
+                            }
+                        }
+                    }
+                    // .font(.system(.footnote, design: .monospaced)).foregroundColor(Color(.lightGray))
+                    .font(.footnote).foregroundColor(Color(.lightGray))
+                    .onChange(of: log.entries.count) {
+                        if !settings.reversedLog {
+                            withAnimation {
+                                proxy.scrollTo(log.entries.last!.id, anchor: .bottom)
                             }
                         } else {
-                            let pattern = filterString.lowercased()
-                            ForEach(log.entries.filter { $0.message.lowercased().contains(pattern) }) { entry in
-                                Text(entry.message)
+                            withAnimation {
+                                proxy.scrollTo(log.entries[0].id, anchor: .top)
+                            }
+                        }
+                    }
+                    .onChange(of: log.entries[0].id) {
+                        if !settings.reversedLog {
+                            withAnimation {
+                                proxy.scrollTo(log.entries.last!.id, anchor: .bottom)
+                            }
+                        } else {
+                            withAnimation {
+                                proxy.scrollTo(log.entries[0].id, anchor: .top)
                             }
                         }
                     }
                 }
-                // .font(.system(.footnote, design: .monospaced)).foregroundColor(Color(.lightGray))
-                .font(.footnote).foregroundColor(Color(.lightGray))
-                .onChange(of: log.entries.count) {
-                    if !settings.reversedLog {
-                        withAnimation {
-                            proxy.scrollTo(log.entries.last!.id, anchor: .bottom)
-                        }
-                    } else {
-                        withAnimation {
-                            proxy.scrollTo(log.entries[0].id, anchor: .top)
-                        }
-                    }
-                }
-                .onChange(of: log.entries[0].id) {
-                    if !settings.reversedLog {
-                        withAnimation {
-                            proxy.scrollTo(log.entries.last!.id, anchor: .bottom)
-                        }
-                    } else {
-                        withAnimation {
-                            proxy.scrollTo(log.entries[0].id, anchor: .top)
-                        }
-                    }
-                }
+
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
