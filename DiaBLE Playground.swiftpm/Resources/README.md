@@ -22,6 +22,9 @@ Currently I am targeting only the latest betas of Xcode and iOS and focusing on 
 Still too early to decide the final design (but I really like already the evil logo 😈), here there are some recent screenshots I tweeted or posted in the comments:
 
 <br><br>
+<p align="center"><img src="https://user-images.githubusercontent.com/7220550/260526410-76e95c8c-61e4-4a46-8bf2-5dd0cc53ba31.png" width="90%"></p>
+<h4 align ="center">Nice technical post mentioning me 😎: <a href="https://frdmtoplay.com/freeing-glucose-data-from-the-freestyle-libre-3/">"Liberating glucose data from the Freestyle Libre 3"</a></h4>
+<br><br>
 <p align="center"><img src="https://user-images.githubusercontent.com/7220550/201089112-7c15993c-9574-43cf-8371-3821cc854903.png" width="33.3%"></p>
 <h4 align ="center">Companion Comparison</h4>
 <br><br>
