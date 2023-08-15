@@ -1113,11 +1113,9 @@ struct Libre3SKBCryptoLib {
 
     let PUBLIC_KEY_TYPE_UNCOMPRESSED: UInt8 = 4
     let CRYPTO_PUBLIC_KEY_SIZE: Int
-    let CRYPTO_EXTENSION_WRAP_DIAGNOSTIC_DATA: Int
-    let CRYPTO_RETURN_INVALID_PARAM: Int
     let patchSigningKey: Data
     let securityVersion: Int
-    let max_key_index: Int
+    let max_key_index: Int = 2
     let app_private_key: Data
     let app_certificate: Data
 }
