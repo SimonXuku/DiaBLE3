@@ -471,9 +471,9 @@ class Libre3: Sensor {
         case security_03       = 0x03
         case challengeLoadDone = 0x08
         case security_09       = 0x09
-        case readChallenge     = 0x11
         case security_0D       = 0x0D
-        case security_0E       = 0x0E
+        case ephemeralLoadDone = 0x0E
+        case readChallenge     = 0x11
 
         var description: String {
             switch self {
@@ -482,9 +482,9 @@ class Libre3: Sensor {
             case .security_03:       "security 0x03 command"
             case .challengeLoadDone: "challenge load done"
             case .security_09:       "security 0x09 command"
-            case .readChallenge:     "read security challenge"
             case .security_0D:       "security 0x0D command"
-            case .security_0E:       "security 0x0E command"
+            case .ephemeralLoadDone: "ephemeral load done"
+            case .readChallenge:     "read security challenge"
             }
         }
     }
@@ -699,7 +699,7 @@ class Libre3: Sensor {
                 } else if data[1] == 140 { // patchCertificate
                     currentSecurityCommand = .security_09
                 } else if data[1] == 65 { // patchEphemeral
-                    currentSecurityCommand = .security_0E
+                    currentSecurityCommand = .ephemeralLoadDone
                 }
             }
             if currentSecurityCommand == .security_03 && lastSecurityEvent == .certificateAccepted {
@@ -726,7 +726,7 @@ class Libre3: Sensor {
                     send(securityCommand: .security_0D)
                     // TODO
 
-                case .security_0E:
+                case .ephemeralLoadDone:
                     log("\(type) \(transmitter!.peripheral!.name!): patch ephemeral: \(payload.hex)")
                     send(securityCommand: .readChallenge)
                     // TODO
