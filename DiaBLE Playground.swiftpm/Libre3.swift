@@ -437,6 +437,29 @@ class Libre3: Sensor {
     class var knownUUIDs: [String] { UUID.allCases.map(\.rawValue) }
 
 
+    // TODO: rename commands and events enums expressively
+
+    // CMD_ECDH_START              = 0x01
+    // CMD_LOAD_CERT_DATA          = 0x02
+    // CMD_LOAD_CERT_DONE          = 0x03
+    // CMD_CERT_ACCEPTED           = 0x04
+    // CMD_AUTHORIZED              = 0x05
+    // CMD_AUTHORIZE_ECDSA         = 0x06
+    // CMD_AUTHORIZATION_CHALLENGE = 0x07
+    // CMD_CHALLENGE_LOAD_DONE     = 0x08
+    // CMD_SEND_CERT               = 0x09
+    // CMD_CERT_READY              = 0x0A
+    // CMD_IV_AUTHENTICATED_SEND   = 0x0B
+    // CMD_IV_READY                = 0x0C
+    // CMD_KEY_AGREEMENT           = 0x0D
+    // CMD_EPHEMERAL_LOAD_DONE     = 0x0E
+    // CMD_EPHEMERAL_KEY_READY     = 0x0F
+    // CMD_ECDH_COMPLETE           = 0x10
+    // CMD_AUTHORIZE_SYMMETRIC     = 0x11
+    // CMD_MODE_SWITCH             = 0x12
+    // CMD_VERIFICATION_FAILURE    = 0x13
+
+
     // - maximum packet size is 20
     // - notified packets are prefixed by 00, 01, 02, ...
     // - written packets are prefixed by 00 00, 12 00, 24 00, 36 00, ...
@@ -502,32 +525,28 @@ class Libre3: Sensor {
 
 
     /// Single byte command written to the .securityCommands characteristic 0x2198
+    /// Can be sent sequentially during both the initial activation and when repairing a sensor
     enum SecurityCommand: UInt8, CustomStringConvertible {
 
-        // can be sent sequentially during both the initial activation and when repairing a sensor
-        case security_01 = 0x01
-        case security_02 = 0x02
-        case security_03 = 0x03
-        case security_09 = 0x09
-        case security_0D = 0x0D
-        case security_0E = 0x0E
-
-        /// final command to get a 67-byte session info
-        case getSessionInfo = 0x08
-
-        /// first command sent when reconnecting
-        case readChallenge  = 0x11
+        case security_01       = 0x01
+        case security_02       = 0x02
+        case security_03       = 0x03
+        case challengeLoadDone = 0x08
+        case security_09       = 0x09
+        case readChallenge     = 0x11
+        case security_0D       = 0x0D
+        case security_0E       = 0x0E
 
         var description: String {
             switch self {
-            case .security_01:    return "security 0x01 command"
-            case .security_02:    return "security 0x02 command"
-            case .security_03:    return "security 0x03 command"
-            case .security_09:    return "security 0x09 command"
-            case .security_0D:    return "security 0x0D command"
-            case .security_0E:    return "security 0x0E command"
-            case .getSessionInfo: return "get session info"
-            case .readChallenge:  return "read security challenge"
+            case .security_01:       "security 0x01 command"
+            case .security_02:       "security 0x02 command"
+            case .security_03:       "security 0x03 command"
+            case .challengeLoadDone: "challenge load done"
+            case .security_09:       "security 0x09 command"
+            case .readChallenge:     "read security challenge"
+            case .security_0D:       "security 0x0D command"
+            case .security_0E:       "security 0x0E command"
             }
         }
     }
@@ -739,7 +758,7 @@ class Libre3: Sensor {
                 if data[1] == 23 {
                     currentSecurityCommand = .readChallenge
                 } else if data[1] == 67 {
-                    currentSecurityCommand = .getSessionInfo
+                    currentSecurityCommand = .challengeLoadDone
                 } else if data[1] == 140 { // patchCertificate
                     currentSecurityCommand = .security_09
                 } else if data[1] == 65 { // patchEphemeral
@@ -797,11 +816,11 @@ class Libre3: Sensor {
 
                         let challengeData = Data(count: 40)
                         write(challengeData)
-                        // writing .getSessionInfo makes the Libre 3 disconnect
-                        send(securityCommand: .getSessionInfo)
+                        // writing .challengeLoadDone makes the Libre 3 disconnect
+                        send(securityCommand: .challengeLoadDone)
                     }
 
-                case .getSessionInfo:
+                case .challengeLoadDone:
                     outCryptoSequence = UInt16(payload[60...61])
                     log("\(type) \(transmitter!.peripheral!.name!): session info: \(payload.hex) (crypto sequence #: \(outCryptoSequence.hex))")
                     transmitter!.peripheral?.setNotifyValue(true, for: transmitter!.characteristics[UUID.patchStatus.rawValue]!)
