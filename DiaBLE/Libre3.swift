@@ -377,6 +377,29 @@ class Libre3: Sensor {
     class var knownUUIDs: [String] { UUID.allCases.map(\.rawValue) }
 
 
+    // TODO: rename commands and events enums expressively
+
+    // static let CMD_AUTHORIZATION_CHALLENGE: UInt8 = 0x07
+    // static let CMD_AUTHORIZED: UInt8 = 0x05
+    // static let CMD_AUTHORIZE_ECDSA: UInt8 = 0x06
+    // static let CMD_AUTHORIZE_SYMMETRIC: UInt8 = 0x11
+    // static let CMD_CERT_ACCEPTED: UInt8 = 0x04
+    // static let CMD_CERT_READY: UInt8 = 0x0A
+    // static let CMD_CHALLENGE_LOAD_DONE: UInt8 = 0x08
+    // static let CMD_ECDH_COMPLETE: UInt8 = 0x10
+    // static let CMD_ECDH_START: UInt8 = 0x01
+    // static let CMD_EPHEMERAL_KEY_READY: UInt8 = 0x0F
+    // static let CMD_EPHEMERAL_LOAD_DONE: UInt8 = 0x0E
+    // static let CMD_IV_AUTHENTICATED_SEND: UInt8 = 0x0B
+    // static let CMD_IV_READY: UInt8 = 0x0C
+    // static let CMD_KEY_AGREEMENT: UInt8 = 0x0D
+    // static let CMD_LOAD_CERT_DATA: UInt8 = 0x02
+    // static let CMD_LOAD_CERT_DONE: UInt8 = 0x03
+    // static let CMD_MODE_SWITCH: UInt8 = 0x12
+    // static let CMD_SEND_CERT: UInt8 = 0x09
+    // static let CMD_VERIFICATION_FAILURE: UInt8 = 0x13
+
+
     // - maximum packet size is 20
     // - notified packets are prefixed by 00, 01, 02, ...
     // - written packets are prefixed by 00 00, 12 00, 24 00, 36 00, ...
