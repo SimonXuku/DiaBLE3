@@ -893,6 +893,40 @@ class Libre3: Sensor {
     ]
 
 
+    /// whiteCryption Secure Key Box
+    struct Libre3SKBCryptoLib {
+        let g_engine: Int
+        let CRYPTO_RETURN_INVALID_COMMAND: Int = 0
+        let CRYPTO_RETURN_SUCCESS: Int = 1
+        let CRYPTO_RETURN_INVALID_PARAM: Int = -1
+        let CRYPTO_RETURN_LIB_ERROR: Int = -2
+        let CRYPTO_RETURN_LOW_MEMORY: Int = -3
+        let CRYPTO_RETURN_VERITY_FAILED: Int = -4
+
+        let CRYPTO_EXTENSION_INIT_LIB: Int = 1
+        let CRYPTO_EXTENSION_INIT_ECDH: Int = 2
+        let CRYPTO_EXTENSION_SET_PATCH_ATTRIB: Int = 3
+        let CRYPTO_EXTENSION_SET_CERTIFICATE: Int = 4
+        let CRYPTO_EXTENSION_GENERATE_EPHEMERAL: Int = 5
+        let CRYPTO_EXTENSION_GENERATE_KAUTH: Int = 6
+        let CRYPTO_EXTENSION_ENCRYPT: Int = 7
+        let CRYPTO_EXTENSION_DECRYPT: Int = 8
+        let CRYPTO_EXTENSION_EXPORT_KAUTH: Int = 9
+        let CRYPTO_EXTENSION_GENERATE_DB_KEY: Int = 10
+        let CRYPTO_EXTENSION_WRAP_DB_KEY: Int = 11
+        let CRYPTO_EXTENSION_UNWRAP_DB_KEY: Int = 12
+        let CRYPTO_EXTENSION_WRAP_DIAGNOSTIC_DATA: Int = 13
+
+        let PUBLIC_KEY_TYPE_UNCOMPRESSED: UInt8 = 4
+        let CRYPTO_PUBLIC_KEY_SIZE: Int
+        let patchSigningKey: Data
+        let securityVersion: Int
+        let max_key_index: Int = 2
+        let app_private_key: Data
+        let app_certificate: Data
+    }
+
+
     // https://github.dev/j-kaltes/Juggluco/blob/primary/Common/src/libre3/java/tk/glucodata/Libre3GattCallback.java
 
     // Juggluco wrappers to Trident's process1() and process2() in liblibre3extension.so (processint() and processbar())
@@ -1103,38 +1137,4 @@ class Libre3: Sensor {
     static let L3_SEC_ERROR_INVALID_CERTIFICATE: Int = 901
     static let L3_SEC_ERROR_LIB_ERROR: Int = 906
 
-}
-
-
-/// whiteCryption Secure Key Box
-struct Libre3SKBCryptoLib {
-    let g_engine: Int
-    let CRYPTO_RETURN_INVALID_COMMAND: Int = 0
-    let CRYPTO_RETURN_SUCCESS: Int = 1
-    let CRYPTO_RETURN_INVALID_PARAM: Int = -1
-    let CRYPTO_RETURN_LIB_ERROR: Int = -2
-    let CRYPTO_RETURN_LOW_MEMORY: Int = -3
-    let CRYPTO_RETURN_VERITY_FAILED: Int = -4
-
-    let CRYPTO_EXTENSION_INIT_LIB: Int = 1
-    let CRYPTO_EXTENSION_INIT_ECDH: Int = 2
-    let CRYPTO_EXTENSION_SET_PATCH_ATTRIB: Int = 3
-    let CRYPTO_EXTENSION_SET_CERTIFICATE: Int = 4
-    let CRYPTO_EXTENSION_GENERATE_EPHEMERAL: Int = 5
-    let CRYPTO_EXTENSION_GENERATE_KAUTH: Int = 6
-    let CRYPTO_EXTENSION_ENCRYPT: Int = 7
-    let CRYPTO_EXTENSION_DECRYPT: Int = 8
-    let CRYPTO_EXTENSION_EXPORT_KAUTH: Int = 9
-    let CRYPTO_EXTENSION_GENERATE_DB_KEY: Int = 10
-    let CRYPTO_EXTENSION_WRAP_DB_KEY: Int = 11
-    let CRYPTO_EXTENSION_UNWRAP_DB_KEY: Int = 12
-    let CRYPTO_EXTENSION_WRAP_DIAGNOSTIC_DATA: Int = 13
-
-    let PUBLIC_KEY_TYPE_UNCOMPRESSED: UInt8 = 4
-    let CRYPTO_PUBLIC_KEY_SIZE: Int
-    let patchSigningKey: Data
-    let securityVersion: Int
-    let max_key_index: Int = 2
-    let app_private_key: Data
-    let app_certificate: Data
 }
