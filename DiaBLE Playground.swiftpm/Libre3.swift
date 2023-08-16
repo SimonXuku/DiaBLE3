@@ -539,14 +539,14 @@ class Libre3: Sensor {
 
         var description: String {
             switch self {
-            case .security_01:       "security 0x01 command"
-            case .security_02:       "security 0x02 command"
-            case .security_03:       "security 0x03 command"
-            case .challengeLoadDone: "challenge load done"
-            case .security_09:       "security 0x09 command"
-            case .security_0D:       "security 0x0D command"
-            case .ephemeralLoadDone: "ephemeral load done"
-            case .readChallenge:     "read security challenge"
+            case .security_01:       return "security 0x01 command"
+            case .security_02:       return "security 0x02 command"
+            case .security_03:       return "security 0x03 command"
+            case .challengeLoadDone: return "challenge load done"
+            case .security_09:       return "security 0x09 command"
+            case .security_0D:       return "security 0x0D command"
+            case .ephemeralLoadDone: return "ephemeral load done"
+            case .readChallenge:     return "read security challenge"
             }
         }
     }
